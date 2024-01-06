@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horarios de Motociclistas</title>
+    <style>
+        .disponible { background-color: green; }
+        .no-disponible { background-color: red; }
+    </style>
+</head>
+<body>
+    <h1>Horarios de Motociclistas</h1>
+    <table border="1">
+        <tr>
+            <th>Hora</th>
+            <th>Disponibilidad</th>
+            <th>Acciones</th>
+        </tr>
+        {% for tramo in tramos_horarios %}
+            <tr class="{{ 'disponible' if tramo['disponible'] else 'no-disponible' }}">
+                <td>{{ tramo['hora'] }}</td>
+                <td>{{ tramo['motociclistas'] }} motociclistas disponibles</td>
+                <td>
+                    {% if tramo['disponible'] and tramo['motociclistas'] > 0 %}
+                        <a href="{{ url_for('reservar', index=loop.index0) }}">Reservar</a>
+                
+                        <a href="{{ url_for('liberar', index=loop.index0) }}">Liberar</a>
+                    {% elif not tramo['disponible'] %}
+                        No disponible
+                      	<a href="{{ url_for('liberar', index=loop.index0) }}">Liberar</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
